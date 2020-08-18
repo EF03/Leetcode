@@ -1,11 +1,9 @@
-package leetcode.linkedList;
+package leetcode.linkedlist;
 
 /**
  * @author Ron
  * @date 2020/8/7 下午 03:37
  */
-
-import java.util.List;
 
 /**
  * Definition for singly-linked list.
