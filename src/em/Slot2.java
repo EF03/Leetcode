@@ -10,8 +10,9 @@ import java.util.stream.Stream;
 /**
  * @author Ron
  * @date 2020/8/18 下午 03:09
+ * 243路
  */
-public class Slot {
+public class Slot2 {
     public static void main(String[] args) {
 //        int[] intacters1 = {'A', 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'B'};
 //        int[] intacters2 = {'A', 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'B'};
@@ -24,17 +25,17 @@ public class Slot {
 //        int[] intacters4 = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 //        int[] intacters5 = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
-        int[] intacters1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int[] intacters2 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int[] intacters3 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int[] intacters4 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int[] intacters5 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        int[] intacters1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        int[] intacters2 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        int[] intacters3 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        int[] intacters4 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        int[] intacters5 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-//        int[] intacters1 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-//        int[] intacters2 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-//        int[] intacters3 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-//        int[] intacters4 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-//        int[] intacters5 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+        int[] intacters1 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+        int[] intacters2 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+        int[] intacters3 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+        int[] intacters4 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+        int[] intacters5 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
 //        int[] intacters5 = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 
@@ -45,7 +46,7 @@ public class Slot {
         wheelList.add(intacters4);
         wheelList.add(intacters5);
 
-        List<List<MatrixLocation>> listMatrixLocation = buildListMatrixLocation();
+//        List<List<MatrixLocation>> listMatrixLocation = buildListMatrixLocation();
 
 
         //BigDecimal 格式化工具    保留两位小数
@@ -61,7 +62,7 @@ public class Slot {
         // 100W  => Total time =   8  秒
         // 1000W => Total time =  71  秒
         // 1E    => Total time =  秒
-        final int loop = 10000;
+        final int loop = 10;
         long loopStart = System.currentTimeMillis();
         boolean isPercentage = true;
         for (int z = 0; z < loop; z++) {
@@ -70,35 +71,39 @@ public class Slot {
             Map<String, Object> buildRewardMatrixMap = buildRewardMatrix(wheelList);
             int[][] rewardArray = (int[][]) buildRewardMatrixMap.get("matrix");
             int[] firstArray = (int[]) buildRewardMatrixMap.get("firstArray");
-            /*      index
-             *   A    0
-             *   B    1
-             *   C    2
-             *
-             * */
-            Map<String, Integer> firstArrayMap = new HashMap<>(3);
-            for (int i = 0; i < firstArray.length; i++) {
-                firstArrayMap.put(String.valueOf(firstArray[i]), i);
-            }
 
+            System.out.println("rewardArray =========================");
             // 印出本次 Matrix
-//            printMatrix(rewardArray);
+            printMatrix(rewardArray);
 
-            // 取得奖项
-            for (int i = 0; i < listMatrixLocation.size(); i++) {
-                MatrixLocation firstNode = listMatrixLocation.get(i).get(1);
-                int lineLong = 0;
-                for (int j = 0; j < listMatrixLocation.get(i).size(); j++) {
-                    if (rewardArray[firstNode.getY()][firstNode.getX()] !=
-                            rewardArray[listMatrixLocation.get(i).get(j).getY()][listMatrixLocation.get(i).get(j).getX()]) {
-                        break;
-                    }
-                    lineLong++;
-                }
-                if (lineLong >= 3) {
-                    rewardList.add(new MatrixLocation(rewardArray[firstNode.getY()][firstNode.getX()], lineLong));
-                }
-            }
+
+            System.out.println("transMatrix =========================");
+
+            int[][] transMatrix = transMatrix(firstArray, rewardArray);
+            printMatrix(transMatrix);
+
+            System.out.println("countMatrix =========================");
+
+            int[][] countMatrix = countMatrix(transMatrix);
+
+            printMatrix(countMatrix);
+
+
+            // 取得奖项 规定路线
+//            for (int i = 0; i < listMatrixLocation.size(); i++) {
+//                MatrixLocation firstNode = listMatrixLocation.get(i).get(1);
+//                int lineLong = 0;
+//                for (int j = 0; j < listMatrixLocation.get(i).size(); j++) {
+//                    if (rewardArray[firstNode.getY()][firstNode.getX()] !=
+//                            rewardArray[listMatrixLocation.get(i).get(j).getY()][listMatrixLocation.get(i).get(j).getX()]) {
+//                        break;
+//                    }
+//                    lineLong++;
+//                }
+//                if (lineLong >= 3) {
+//                    rewardList.add(new MatrixLocation(rewardArray[firstNode.getY()][firstNode.getX()], lineLong));
+//                }
+//            }
 //
 //            System.out.println(rewardList);
 
@@ -108,50 +113,155 @@ public class Slot {
              *   C
              *
              * */
-            int[][] statisticsReward = new int[3][3];
-            for (MatrixLocation node : rewardList) {
-                int lineLong = node.getY() - 3;
-                statisticsReward[firstArrayMap.get(String.valueOf(node.getX()))][lineLong] = ++statisticsReward[firstArrayMap.get(String.valueOf(node.getX()))][lineLong];
-
-                String count = statisticsRewardMatrix[Integer.parseInt(String.valueOf(node.getX()))][lineLong];
-                if (count == null) {
-                    count = "0";
-                }
-                int countInt = Integer.parseInt(count);
-                statisticsRewardMatrix[Integer.parseInt(String.valueOf(node.getX()))][lineLong] = String.valueOf(++countInt);
-            }
+//            int[][] statisticsReward = new int[3][3];
+//            for (MatrixLocation node : rewardList) {
+//                int lineLong = node.getY() - 3;
+//                statisticsReward[firstArrayMap.get(String.valueOf(node.getX()))][lineLong] = ++statisticsReward[firstArrayMap.get(String.valueOf(node.getX()))][lineLong];
+//
+//                String count = statisticsRewardMatrix[Integer.parseInt(String.valueOf(node.getX()))][lineLong];
+//                if (count == null) {
+//                    count = "0";
+//                }
+//                int countInt = Integer.parseInt(count);
+//                statisticsRewardMatrix[Integer.parseInt(String.valueOf(node.getX()))][lineLong] = String.valueOf(++countInt);
+//            }
 //            printMatrix(statisticsReward);
         }
         long loopEnd = System.currentTimeMillis();
         System.out.println("Total time = " + (loopEnd - loopStart) / 1000 + " 秒");
 
 
-        for (int i = 0; i < statisticsRewardMatrix.length; i++) {
-            for (int j = 0; j < statisticsRewardMatrix[i].length; j++) {
-
-                String times = statisticsRewardMatrix[i][j];
-
-                if (times == null) {
-                    times = "0";
-                }
-                if (isPercentage) {
-                    //除法结果保留4位小数，
-                    double per = new BigDecimal(Float.parseFloat(times) / loop).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
-                    //格式化为百分比字符串（自带百分号）
-                    String Ratio = percent.format(per);
-                    statisticsRewardMatrix[i][j] = Ratio;
-                } else {
-                    statisticsRewardMatrix[i][j] = times;
-                }
-            }
-        }
-        Gson gson = new Gson();
+//        for (int i = 0; i < statisticsRewardMatrix.length; i++) {
+//            for (int j = 0; j < statisticsRewardMatrix[i].length; j++) {
+//
+//                String times = statisticsRewardMatrix[i][j];
+//
+//                if (times == null) {
+//                    times = "0";
+//                }
+//                if (isPercentage) {
+//                    //除法结果保留4位小数，
+//                    double per = new BigDecimal(Float.parseFloat(times) / loop).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
+//                    //格式化为百分比字符串（自带百分号）
+//                    String Ratio = percent.format(per);
+//                    statisticsRewardMatrix[i][j] = Ratio;
+//                } else {
+//                    statisticsRewardMatrix[i][j] = times;
+//                }
+//            }
+//        }
+//        Gson gson = new Gson();
 //        System.out.println(gson.toJson(statisticsRewardMatrix));
-        printMatrix(statisticsRewardMatrix);
+//        printMatrix(statisticsRewardMatrix);
 
 //        System.out.println(sta);
 
 
+    }
+
+    private static int[][] countMatrix(int[][] transMatrix) {
+        /*
+         *  每一个字母（id）对应的 3 4 5 连线
+         *        id
+         *          A    B    C
+         *   3
+         *   4
+         *   5
+         *
+         * */
+
+        int[][] countMatrix = new int[3][3];
+
+        for (int i = 0; i < countMatrix.length; i++) {
+
+            for (int j = 0; j < countMatrix[i].length; j++) {
+                switch (j) {
+                    case 0:
+                        countMatrix[i][j] = transMatrix[i][0] * transMatrix[i][1];
+                        break;
+                    case 1:
+                        int count4 = transMatrix[i][0] * transMatrix[i][1] * transMatrix[i][2];
+                        countMatrix[i][j] = count4;
+                        if (count4 == 0) {
+                            break;
+                        }
+                        // 三连线--
+                        countMatrix[i][j - 1] = --countMatrix[i][j - 1];
+                        break;
+                    case 2:
+                        int count5 = transMatrix[i][0] * transMatrix[i][1] * transMatrix[i][2] * transMatrix[i][3];
+                        countMatrix[i][j] = count5;
+                        // 三连线--
+                        if (count5 == 0) {
+                            break;
+                        }
+                        // 4连线--
+                        countMatrix[i][j - 1] = --countMatrix[i][j - 1];
+                        // 3连线--
+//                        countMatrix[i][j - 2] = --countMatrix[i][j - 2];
+                        break;
+                    default:
+                        break;
+                }
+
+
+//                if (transMatrix[i][j] == 0) {
+//                    break;
+//                }
+//                ++count;
+
+
+            }
+        }
+
+
+        return countMatrix;
+
+    }
+
+    private static int[][] transMatrix(int[] firstArray, int[][] rewardArray) {
+
+        /*
+         *  每一个字母在每个滚轮各有几个
+         *        index
+         *          1     2    3    4
+         *   A
+         *   B
+         *   C
+         *
+         * */
+        int[][] resultMatrix = new int[3][4];
+        /*
+         *  第一个滚轮的字母分别在第几row
+         *       index
+         *   A    0
+         *   B    1
+         *   C    2
+         *
+         * */
+//        Map<String, Integer> firstArrayMap = new HashMap<>(3);
+//        for (int i = 0; i < firstArray.length; i++) {
+//            firstArrayMap.put(String.valueOf(firstArray[i]), i);
+//        }
+
+
+        // 243路
+        for (int i = 0; i < rewardArray.length; i++) {
+            for (int j = 1; j < rewardArray[i].length; j++) {
+
+                for (int k = 0; k < firstArray.length; k++) {
+                    if (firstArray[k] == rewardArray[i][j]) {
+                        int count = resultMatrix[k][j - 1];
+                        resultMatrix[k][j - 1] = ++count;
+                    }
+                }
+
+
+            }
+        }
+
+
+        return resultMatrix;
     }
 
     private static List<List<MatrixLocation>> buildListMatrixLocation() {
