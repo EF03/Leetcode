@@ -25,17 +25,17 @@ public class Slot2 {
 //        int[] intacters4 = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 //        int[] intacters5 = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
-//        int[] intacters1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-//        int[] intacters2 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-//        int[] intacters3 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-//        int[] intacters4 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-//        int[] intacters5 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] intacters1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] intacters2 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] intacters3 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] intacters4 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] intacters5 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-        int[] intacters1 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-        int[] intacters2 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-        int[] intacters3 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-        int[] intacters4 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-        int[] intacters5 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+//        int[] intacters1 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+//        int[] intacters2 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+//        int[] intacters3 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+//        int[] intacters4 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+//        int[] intacters5 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
 //        int[] intacters5 = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 
@@ -56,107 +56,88 @@ public class Slot2 {
         // init end
         System.out.println("=================================");
         // 第幾個獎  有幾條連線
-        List<MatrixLocation> rewardList = new ArrayList<>(50);
+//        List<MatrixLocation> rewardList = new ArrayList<>(50);
         String[][] statisticsRewardMatrix = new String[10][3];
-        // 10W   => Total time =   1  秒
-        // 100W  => Total time =   8  秒
-        // 1000W => Total time =  71  秒
-        // 1E    => Total time =  秒
-        final int loop = 10;
+        /*
+         * 10W   => Total time =  0  秒
+         * 100W  => Total time =  0  秒
+         * 1000W => Total time =  4  秒
+         * 1E    => Total time =  51 秒
+         *
+         * */
+        final int loop = 1000000000;
         long loopStart = System.currentTimeMillis();
         boolean isPercentage = true;
         for (int z = 0; z < loop; z++) {
-            rewardList.clear();
+//            rewardList.clear();
 
             Map<String, Object> buildRewardMatrixMap = buildRewardMatrix(wheelList);
             int[][] rewardArray = (int[][]) buildRewardMatrixMap.get("matrix");
             int[] firstArray = (int[]) buildRewardMatrixMap.get("firstArray");
 
-            System.out.println("rewardArray =========================");
+//            System.out.println("rewardArray =========================");
             // 印出本次 Matrix
-            printMatrix(rewardArray);
-
-
-            System.out.println("transMatrix =========================");
+//            printMatrix(rewardArray);
+//            System.out.println("transMatrix =========================");
 
             int[][] transMatrix = transMatrix(firstArray, rewardArray);
-            printMatrix(transMatrix);
-
-            System.out.println("countMatrix =========================");
+//            printMatrix(transMatrix);
+//            System.out.println("countMatrix =========================");
 
             int[][] countMatrix = countMatrix(transMatrix);
 
-            printMatrix(countMatrix);
+//            printMatrix(countMatrix);
+
+            statisticsRewardMatrix = statisticsRewardMatrix(statisticsRewardMatrix, countMatrix, firstArray);
 
 
-            // 取得奖项 规定路线
-//            for (int i = 0; i < listMatrixLocation.size(); i++) {
-//                MatrixLocation firstNode = listMatrixLocation.get(i).get(1);
-//                int lineLong = 0;
-//                for (int j = 0; j < listMatrixLocation.get(i).size(); j++) {
-//                    if (rewardArray[firstNode.getY()][firstNode.getX()] !=
-//                            rewardArray[listMatrixLocation.get(i).get(j).getY()][listMatrixLocation.get(i).get(j).getX()]) {
-//                        break;
-//                    }
-//                    lineLong++;
-//                }
-//                if (lineLong >= 3) {
-//                    rewardList.add(new MatrixLocation(rewardArray[firstNode.getY()][firstNode.getX()], lineLong));
-//                }
-//            }
-//
-//            System.out.println(rewardList);
-
-            /*       3   4   5
-             *   A
-             *   B
-             *   C
-             *
-             * */
-//            int[][] statisticsReward = new int[3][3];
-//            for (MatrixLocation node : rewardList) {
-//                int lineLong = node.getY() - 3;
-//                statisticsReward[firstArrayMap.get(String.valueOf(node.getX()))][lineLong] = ++statisticsReward[firstArrayMap.get(String.valueOf(node.getX()))][lineLong];
-//
-//                String count = statisticsRewardMatrix[Integer.parseInt(String.valueOf(node.getX()))][lineLong];
-//                if (count == null) {
-//                    count = "0";
-//                }
-//                int countInt = Integer.parseInt(count);
-//                statisticsRewardMatrix[Integer.parseInt(String.valueOf(node.getX()))][lineLong] = String.valueOf(++countInt);
-//            }
-//            printMatrix(statisticsReward);
         }
         long loopEnd = System.currentTimeMillis();
         System.out.println("Total time = " + (loopEnd - loopStart) / 1000 + " 秒");
 
 
-//        for (int i = 0; i < statisticsRewardMatrix.length; i++) {
-//            for (int j = 0; j < statisticsRewardMatrix[i].length; j++) {
-//
-//                String times = statisticsRewardMatrix[i][j];
-//
-//                if (times == null) {
-//                    times = "0";
-//                }
-//                if (isPercentage) {
-//                    //除法结果保留4位小数，
-//                    double per = new BigDecimal(Float.parseFloat(times) / loop).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
-//                    //格式化为百分比字符串（自带百分号）
-//                    String Ratio = percent.format(per);
-//                    statisticsRewardMatrix[i][j] = Ratio;
-//                } else {
-//                    statisticsRewardMatrix[i][j] = times;
-//                }
-//            }
-//        }
+        for (int i = 0; i < statisticsRewardMatrix.length; i++) {
+            for (int j = 0; j < statisticsRewardMatrix[i].length; j++) {
+
+                String times = statisticsRewardMatrix[i][j];
+
+                if (times == null) {
+                    times = "0";
+                }
+                if (isPercentage) {
+                    //除法结果保留4位小数，
+                    double per = new BigDecimal(Float.parseFloat(times) / loop).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    //格式化为百分比字符串（自带百分号）
+                    String Ratio = percent.format(per);
+                    statisticsRewardMatrix[i][j] = Ratio;
+                } else {
+                    statisticsRewardMatrix[i][j] = times;
+                }
+            }
+        }
 //        Gson gson = new Gson();
 //        System.out.println(gson.toJson(statisticsRewardMatrix));
-//        printMatrix(statisticsRewardMatrix);
+        printMatrix(statisticsRewardMatrix);
 
 //        System.out.println(sta);
 
 
+    }
+
+    private static String[][] statisticsRewardMatrix(String[][] statisticsRewardMatrix, int[][] countMatrix, int[] firstArray) {
+
+        for (int i = 0; i < countMatrix.length; i++) {
+            for (int j = 0; j < countMatrix[i].length; j++) {
+
+                for (int k = 0; k < firstArray.length; k++) {
+                    statisticsRewardMatrix[firstArray[j]][k] = String.valueOf(countMatrix[k][j] + strParseInt(statisticsRewardMatrix[firstArray[j]][k]));
+                }
+
+            }
+        }
+
+
+        return statisticsRewardMatrix;
     }
 
     private static int[][] countMatrix(int[][] transMatrix) {
@@ -185,8 +166,8 @@ public class Slot2 {
                         if (count4 == 0) {
                             break;
                         }
-                        // 三连线--
-                        countMatrix[i][j - 1] = --countMatrix[i][j - 1];
+                        // 三连线 = 4连线 - 3連線
+                        countMatrix[i][j - 1] = (countMatrix[i][j - 1] - count4) < 0 ? 0 : (countMatrix[i][j - 1] - count4);
                         break;
                     case 2:
                         int count5 = transMatrix[i][0] * transMatrix[i][1] * transMatrix[i][2] * transMatrix[i][3];
@@ -196,19 +177,11 @@ public class Slot2 {
                             break;
                         }
                         // 4连线--
-                        countMatrix[i][j - 1] = --countMatrix[i][j - 1];
-                        // 3连线--
-//                        countMatrix[i][j - 2] = --countMatrix[i][j - 2];
+                        countMatrix[i][j - 1] = (countMatrix[i][j - 1] - count5) < 0 ? 0 : (countMatrix[i][j - 1] - count5);
                         break;
                     default:
                         break;
                 }
-
-
-//                if (transMatrix[i][j] == 0) {
-//                    break;
-//                }
-//                ++count;
 
 
             }
@@ -532,12 +505,6 @@ public class Slot2 {
                     firstArray[j] = intacters[index];
                 }
                 randomMatrix[i][j] = intacters[index];
-//                if (sta.get(String.valueOf(intacters[index])) == null) {
-//                    sta.put(String.valueOf(intacters[index]), 1);
-//                } else {
-//                    int num = sta.get(String.valueOf(intacters[index]));
-//                    sta.put(String.valueOf(intacters[index]), ++num);
-//                }
             }
         }
 
@@ -559,7 +526,7 @@ public class Slot2 {
         for (int[] array : buildTransMatrix) {
             for (int i : array) {
 
-                System.out.printf("%4d", i);
+                System.out.printf("%10d", i);
 
             }
             System.out.println();
@@ -581,5 +548,9 @@ public class Slot2 {
 
     private static int[] intArrayStrToArray(String arrayStr) {
         return Stream.of(arrayStr.replaceAll("[\\[\\]\\, ]", "").split("")).mapToInt(Integer::parseInt).toArray();
+    }
+
+    private static int strParseInt(String str) {
+        return (str == null) ? 0 : Integer.parseInt(str);
     }
 }
