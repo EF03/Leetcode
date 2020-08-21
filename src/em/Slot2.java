@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -14,6 +16,7 @@ import java.util.stream.Stream;
  */
 public class Slot2 {
     public static void main(String[] args) {
+        Gson gson = new Gson();
 //        int[] intacters1 = {'A', 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'B'};
 //        int[] intacters2 = {'A', 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'B'};
 //        int[] intacters3 = {'A', 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'B'};
@@ -25,11 +28,11 @@ public class Slot2 {
 //        int[] intacters4 = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 //        int[] intacters5 = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
-        int[] intacters1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int[] intacters2 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int[] intacters3 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int[] intacters4 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int[] intacters5 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        int[] intacters1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        int[] intacters2 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        int[] intacters3 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        int[] intacters4 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        int[] intacters5 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 //        int[] intacters1 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
 //        int[] intacters2 = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
@@ -39,12 +42,14 @@ public class Slot2 {
 //        int[] intacters5 = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 
-        List<int[]> wheelList = new ArrayList<>(5);
-        wheelList.add(intacters1);
-        wheelList.add(intacters2);
-        wheelList.add(intacters3);
-        wheelList.add(intacters4);
-        wheelList.add(intacters5);
+//        List<int[]> wheelList = new ArrayList<>(5);
+//        wheelList.add(intacters1);
+//        wheelList.add(intacters2);
+//        wheelList.add(intacters3);
+//        wheelList.add(intacters4);
+//        wheelList.add(intacters5);
+
+        List<int[]> wheelList = gernerateWhellList();
 
 //        List<List<MatrixLocation>> listMatrixLocation = buildListMatrixLocation();
 
@@ -60,14 +65,14 @@ public class Slot2 {
         String[][] statisticsRewardMatrix = new String[10][3];
         /*
          * 10W   => Total time =  0  秒
-         * 100W  => Total time =  0  秒
-         * 1000W => Total time =  4  秒
-         * 1E    => Total time =  51 秒
+         * 100W  => Total time =  2  秒
+         * 1000W => Total time =  10  秒
+         * 1E    => Total time =  105 秒
          *
          * */
-        final int loop = 1000000000;
+        final int loop = 10;
         long loopStart = System.currentTimeMillis();
-        boolean isPercentage = true;
+        boolean isPercentage = false;
         for (int z = 0; z < loop; z++) {
 //            rewardList.clear();
 
@@ -75,18 +80,22 @@ public class Slot2 {
             int[][] rewardArray = (int[][]) buildRewardMatrixMap.get("matrix");
             int[] firstArray = (int[]) buildRewardMatrixMap.get("firstArray");
 
-//            System.out.println("rewardArray =========================");
             // 印出本次 Matrix
-//            printMatrix(rewardArray);
-//            System.out.println("transMatrix =========================");
+            System.out.println("====================rewardArray =========================");
+            printMatrix(rewardArray);
+
+//            System.out.println("firstArray =========================");
+//            System.out.println(gson.toJson(firstArray));
+
 
             int[][] transMatrix = transMatrix(firstArray, rewardArray);
-//            printMatrix(transMatrix);
-//            System.out.println("countMatrix =========================");
+            System.out.println("transMatrix =========================");
+            printMatrix(transMatrix);
+
 
             int[][] countMatrix = countMatrix(transMatrix);
-
-//            printMatrix(countMatrix);
+            System.out.println("countMatrix =========================");
+            printMatrix(countMatrix);
 
             statisticsRewardMatrix = statisticsRewardMatrix(statisticsRewardMatrix, countMatrix, firstArray);
 
@@ -115,7 +124,7 @@ public class Slot2 {
                 }
             }
         }
-//        Gson gson = new Gson();
+//
 //        System.out.println(gson.toJson(statisticsRewardMatrix));
         printMatrix(statisticsRewardMatrix);
 
@@ -124,14 +133,80 @@ public class Slot2 {
 
     }
 
+    private static List<int[]> gernerateWhellList() {
+        Gson gson = new Gson();
+        RollerSetting rollerSetting1 = new RollerSetting(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        RollerSetting rollerSetting2 = new RollerSetting(2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        RollerSetting rollerSetting3 = new RollerSetting(3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        RollerSetting rollerSetting4 = new RollerSetting(4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        RollerSetting rollerSetting5 = new RollerSetting(5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+
+        List<RollerSetting> listRollerSetting = new ArrayList<>();
+        listRollerSetting.add(rollerSetting5);
+        listRollerSetting.add(rollerSetting3);
+        listRollerSetting.add(rollerSetting4);
+        listRollerSetting.add(rollerSetting2);
+        listRollerSetting.add(rollerSetting1);
+
+        // sql 下 order可省略
+        List<RollerSetting> listRollerSettingSort =listRollerSetting.stream().sorted(Comparator.comparing(RollerSetting::getId)).collect(Collectors.toList());
+
+        List<int[]> wheelList = new ArrayList<>(5);
+
+        for (RollerSetting rollerSetting : listRollerSettingSort) {
+
+            int reward0 = rollerSetting.getReward0();
+            int reward1 = rollerSetting.getReward1();
+            int reward2 = rollerSetting.getReward2();
+            int reward3 = rollerSetting.getReward3();
+            int reward4 = rollerSetting.getReward4();
+            int reward5 = rollerSetting.getReward5();
+            int reward6 = rollerSetting.getReward6();
+            int reward7 = rollerSetting.getReward7();
+            int reward8 = rollerSetting.getReward8();
+            int reward9 = rollerSetting.getReward9();
+
+            int total = reward0 + reward1 + reward2 + reward3 + reward4 + reward5 + reward6 + reward7 + reward8 + reward9;
+            int[] wheelArray = new int[total];
+
+            int count = 0;
+            IntStream.range(count, count + reward0).forEach(i -> wheelArray[i] = 0);
+            count += reward0;
+            IntStream.range(count, count + reward1).forEach(i -> wheelArray[i] = 1);
+            count += reward1;
+            IntStream.range(count, count + reward2).forEach(i -> wheelArray[i] = 2);
+            count += reward2;
+            IntStream.range(count, count + reward3).forEach(i -> wheelArray[i] = 3);
+            count += reward3;
+            IntStream.range(count, count + reward4).forEach(i -> wheelArray[i] = 4);
+            count += reward4;
+            IntStream.range(count, count + reward5).forEach(i -> wheelArray[i] = 5);
+            count += reward5;
+            IntStream.range(count, count + reward6).forEach(i -> wheelArray[i] = 6);
+            count += reward6;
+            IntStream.range(count, count + reward7).forEach(i -> wheelArray[i] = 7);
+            count += reward7;
+            IntStream.range(count, count + reward8).forEach(i -> wheelArray[i] = 8);
+            count += reward8;
+            IntStream.range(count, count + reward9).forEach(i -> wheelArray[i] = 9);
+
+            System.out.println(gson.toJson(wheelArray));
+
+            wheelList.add(wheelArray);
+
+        }
+
+
+        return wheelList;
+    }
+
     private static String[][] statisticsRewardMatrix(String[][] statisticsRewardMatrix, int[][] countMatrix, int[] firstArray) {
 
         for (int i = 0; i < countMatrix.length; i++) {
             for (int j = 0; j < countMatrix[i].length; j++) {
 
-                for (int k = 0; k < firstArray.length; k++) {
-                    statisticsRewardMatrix[firstArray[j]][k] = String.valueOf(countMatrix[k][j] + strParseInt(statisticsRewardMatrix[firstArray[j]][k]));
-                }
+                int origin = strParseInt(statisticsRewardMatrix[firstArray[i]][j]);
+                statisticsRewardMatrix[firstArray[i]][j] = String.valueOf(countMatrix[i][j] + origin);
 
             }
         }
