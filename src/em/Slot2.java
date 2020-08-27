@@ -3,6 +3,7 @@ package em;
 import com.google.gson.Gson;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class Slot2 {
          * 1E    => Total time =  105 秒
          *
          * */
-        final int loop = 1000000;
+        final int loop = 100000000;
         long loopStart = System.currentTimeMillis();
         boolean isPercentage = true;
         for (int z = 0; z < loop; z++) {
@@ -88,30 +89,23 @@ public class Slot2 {
 
     }
 
-    private static void getProbability(List<int[]> wheelList) {
+    public static void getProbability(List<int[]> wheelList) {
 
-
-        //BigDecimal 格式化工具    保留两位小数
+        // BigDecimal 格式化工具    保留两位小数
         NumberFormat percent = NumberFormat.getPercentInstance();
         percent.setMaximumFractionDigits(4);
 
-//        double perTest = new BigDecimal((float) (1 * 1 * 1) / 1000).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
-//        //格式化为百分比字符串（自带百分号）
-//        String RatioTest = percent.format(perTest);
-//
-//        System.out.println("RatioTest = " + RatioTest);
-
 
         String[][] result = new String[10][3];
-        int[] totalSize = new int[5];
-        int[] probabilityNum = new int[3];
+        BigDecimal[] totalSize = new BigDecimal[5];
+        BigDecimal[] probabilityNum = new BigDecimal[3];
 
         for (int i = 0; i < wheelList.size(); i++) {
-            totalSize[i] = wheelList.get(i).length;
+            totalSize[i] = BigDecimal.valueOf(wheelList.get(i).length);
         }
-        probabilityNum[0] = totalSize[0] * totalSize[1] * totalSize[2];
-        probabilityNum[1] = totalSize[0] * totalSize[1] * totalSize[2] * totalSize[3];
-        probabilityNum[2] = totalSize[0] * totalSize[1] * totalSize[2] * totalSize[3] * totalSize[4];
+        probabilityNum[0] = totalSize[0].multiply(totalSize[1]).multiply(totalSize[2]);
+        probabilityNum[1] = totalSize[0].multiply(totalSize[1]).multiply(totalSize[2]).multiply(totalSize[3]);
+        probabilityNum[2] = totalSize[0].multiply(totalSize[1]).multiply(totalSize[2]).multiply(totalSize[3]).multiply(totalSize[4]);
 
 
         for (int i = 0; i < result.length; i++) {
@@ -121,43 +115,38 @@ public class Slot2 {
             int third = (int) Arrays.stream(wheelList.get(2)).filter(e -> e == z).count() * 3;
             int fourth = (int) Arrays.stream(wheelList.get(3)).filter(e -> e == z).count() * 3;
             int fifth = (int) Arrays.stream(wheelList.get(4)).filter(e -> e == z).count() * 3;
-            double per;
-            double per1 = 0;
+            BigDecimal per = new BigDecimal("0");
             String Ratio;
-            float product = 0;
-//            float product1 = 0;
-            float product3 = firstWheel * second * third;
-            float product4 = firstWheel * second * third * fourth;
-            float product5 = firstWheel * second * third * fourth * fifth;
+//            float product;
+            BigDecimal product1;
+            BigDecimal product2;
+            BigDecimal product3 = BigDecimal.valueOf(firstWheel * second * third);
+            BigDecimal product4 = BigDecimal.valueOf(firstWheel * second * third * fourth);
+            BigDecimal product5 = BigDecimal.valueOf(firstWheel * second * third * fourth * fifth);
             for (int j = 0; j < result[i].length; j++) {
                 switch (j) {
                     case 0:
                         //除法结果保留4位小数，
-//                        product = firstWheel * second * third;
-                        product = (product3 / probabilityNum[j]) - (product4 / probabilityNum[j]);
-//                        product = (product3 / probabilityNum[j]);
-                        per1 = new BigDecimal(product).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        product1 = (product3.divide(probabilityNum[j], 10, BigDecimal.ROUND_HALF_UP));
+                        product2 = (product4.divide(probabilityNum[j + 1], 10, BigDecimal.ROUND_HALF_UP));
+                        per = product1.subtract(product2);
                         break;
                     case 1:
-//                        product = firstWheel * second * third * fourth;
-                        product = (product4 / probabilityNum[j]) - (product5 / probabilityNum[j]);
-//                        product = (product4 / probabilityNum[j]);
-                        per1 = new BigDecimal(product).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        product1 = (product4.divide(probabilityNum[j], 10, BigDecimal.ROUND_HALF_UP));
+                        product2 = (product5.divide(probabilityNum[j + 1], 10, BigDecimal.ROUND_HALF_UP));
+                        per = product1.subtract(product2);
                         break;
                     case 2:
-//                        product = firstWheel * second * third * fourth * fifth;
-                        product = product5 / probabilityNum[j];
+                        per = (product5.divide(probabilityNum[j], 10, BigDecimal.ROUND_HALF_UP));
                         break;
                     default:
                         break;
                 }
-                per = new BigDecimal(per1).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
                 //格式化为百分比字符串（自带百分号）
                 Ratio = percent.format(per);
                 result[i][j] = Ratio;
             }
         }
-
         System.out.println(matrixArrayToString(result));
     }
 
@@ -167,11 +156,11 @@ public class Slot2 {
 
     private static List<int[]> gernerateWhellList() {
         Gson gson = new Gson();
-        RollerSetting rollerSetting1 = new RollerSetting(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-        RollerSetting rollerSetting2 = new RollerSetting(2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-        RollerSetting rollerSetting3 = new RollerSetting(3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-        RollerSetting rollerSetting4 = new RollerSetting(4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-        RollerSetting rollerSetting5 = new RollerSetting(5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        RollerSetting rollerSetting1 = new RollerSetting(1, 11, 4, 8, 7, 6, 10, 10, 10, 10, 10);
+        RollerSetting rollerSetting2 = new RollerSetting(2, 10, 5, 10, 10, 10, 2, 10, 10, 10, 10);
+        RollerSetting rollerSetting3 = new RollerSetting(3, 10, 1, 3, 1, 5, 10, 7, 6, 13, 2);
+        RollerSetting rollerSetting4 = new RollerSetting(4, 10, 2, 10, 2, 10, 2, 10, 10, 10, 10);
+        RollerSetting rollerSetting5 = new RollerSetting(5, 10, 3, 10, 10, 6, 2, 2, 10, 2, 10);
 
 //        RollerSetting rollerSetting1 = new RollerSetting(1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 //        RollerSetting rollerSetting2 = new RollerSetting(2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
