@@ -110,34 +110,40 @@ public class Slot2 {
 
         for (int i = 0; i < result.length; i++) {
             int z = i;
-            int firstWheel = (int) Arrays.stream(wheelList.get(0)).filter(e -> e == z).count() * 3;
-            int second = (int) Arrays.stream(wheelList.get(1)).filter(e -> e == z).count() * 3;
-            int third = (int) Arrays.stream(wheelList.get(2)).filter(e -> e == z).count() * 3;
-            int fourth = (int) Arrays.stream(wheelList.get(3)).filter(e -> e == z).count() * 3;
-            int fifth = (int) Arrays.stream(wheelList.get(4)).filter(e -> e == z).count() * 3;
+            int firstWheel = (int) Arrays.stream(wheelList.get(0)).filter(e -> e == z).count();
+            int second = (int) Arrays.stream(wheelList.get(1)).filter(e -> e == z).count();
+            int third = (int) Arrays.stream(wheelList.get(2)).filter(e -> e == z).count();
+            int fourth = (int) Arrays.stream(wheelList.get(3)).filter(e -> e == z).count();
+            int fifth = (int) Arrays.stream(wheelList.get(4)).filter(e -> e == z).count();
+            BigDecimal cut4 = totalSize[3].subtract(new BigDecimal(fourth)).divide(totalSize[3], 10, BigDecimal.ROUND_HALF_UP).pow(3);
+            BigDecimal cut5 = totalSize[4].subtract(new BigDecimal(fifth)).divide(totalSize[4], 10, BigDecimal.ROUND_HALF_UP).pow(3);
             BigDecimal per = new BigDecimal("0");
             String Ratio;
 //            float product;
             BigDecimal product1;
             BigDecimal product2;
-            BigDecimal product3 = BigDecimal.valueOf(firstWheel * second * third);
-            BigDecimal product4 = BigDecimal.valueOf(firstWheel * second * third * fourth);
-            BigDecimal product5 = BigDecimal.valueOf(firstWheel * second * third * fourth * fifth);
+            BigDecimal totalNum3 = BigDecimal.valueOf(firstWheel * second * third * 27);
+            BigDecimal totalNum4 = BigDecimal.valueOf(firstWheel * second * third * fourth * 81);
+            BigDecimal totalNum5 = BigDecimal.valueOf(firstWheel * second * third * fourth * fifth * 243);
             for (int j = 0; j < result[i].length; j++) {
                 switch (j) {
                     case 0:
                         //除法结果保留4位小数，
-                        product1 = (product3.divide(probabilityNum[j], 10, BigDecimal.ROUND_HALF_UP));
-                        product2 = (product4.divide(probabilityNum[j + 1], 10, BigDecimal.ROUND_HALF_UP));
-                        per = product1.subtract(product2);
+                        product1 = (totalNum3.divide(probabilityNum[j], 10, BigDecimal.ROUND_HALF_UP)).multiply(cut4);
+//                        product2 = (totalNum4.divide(probabilityNum[j + 1], 10, BigDecimal.ROUND_HALF_UP));
+//                        per = product1.subtract(product2);
+                        per = product1.subtract(BigDecimal.valueOf(0));
                         break;
                     case 1:
-                        product1 = (product4.divide(probabilityNum[j], 10, BigDecimal.ROUND_HALF_UP));
-                        product2 = (product5.divide(probabilityNum[j + 1], 10, BigDecimal.ROUND_HALF_UP));
-                        per = product1.subtract(product2);
+                        product1 = (totalNum4.divide(probabilityNum[j], 10, BigDecimal.ROUND_HALF_UP)).multiply(cut5);
+
+//                        product2 = (totalNum5.divide(probabilityNum[j + 1], 10, BigDecimal.ROUND_HALF_UP));
+//                        per = product1.subtract(product2);
+
+                        per = product1.subtract(BigDecimal.valueOf(0));
                         break;
                     case 2:
-                        per = (product5.divide(probabilityNum[j], 10, BigDecimal.ROUND_HALF_UP));
+                        per = (totalNum5.divide(probabilityNum[j], 10, BigDecimal.ROUND_HALF_UP));
                         break;
                     default:
                         break;
@@ -156,11 +162,11 @@ public class Slot2 {
 
     private static List<int[]> gernerateWhellList() {
         Gson gson = new Gson();
-        RollerSetting rollerSetting1 = new RollerSetting(1, 11, 4, 8, 7, 6, 10, 10, 10, 10, 10);
-        RollerSetting rollerSetting2 = new RollerSetting(2, 10, 5, 10, 10, 10, 2, 10, 10, 10, 10);
-        RollerSetting rollerSetting3 = new RollerSetting(3, 10, 1, 3, 1, 5, 10, 7, 6, 13, 2);
-        RollerSetting rollerSetting4 = new RollerSetting(4, 10, 2, 10, 2, 10, 2, 10, 10, 10, 10);
-        RollerSetting rollerSetting5 = new RollerSetting(5, 10, 3, 10, 10, 6, 2, 2, 10, 2, 10);
+        RollerSetting rollerSetting1 = new RollerSetting(1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9);
+        RollerSetting rollerSetting2 = new RollerSetting(2, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9);
+        RollerSetting rollerSetting3 = new RollerSetting(3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4);
+        RollerSetting rollerSetting4 = new RollerSetting(4, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9);
+        RollerSetting rollerSetting5 = new RollerSetting(5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9);
 
 //        RollerSetting rollerSetting1 = new RollerSetting(1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 //        RollerSetting rollerSetting2 = new RollerSetting(2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -235,7 +241,6 @@ public class Slot2 {
 
             }
         }
-
         return statisticsRewardMatrix;
     }
 
@@ -253,31 +258,42 @@ public class Slot2 {
         int[][] countMatrix = new int[3][3];
 
         for (int i = 0; i < countMatrix.length; i++) {
-
+            int count3 = transMatrix[i][0] * transMatrix[i][1];
+            int count4 = transMatrix[i][0] * transMatrix[i][1] * transMatrix[i][2];
+            int count5 = transMatrix[i][0] * transMatrix[i][1] * transMatrix[i][2] * transMatrix[i][3];
             for (int j = 0; j < countMatrix[i].length; j++) {
                 switch (j) {
                     case 0:
-                        countMatrix[i][j] = transMatrix[i][0] * transMatrix[i][1];
+                        countMatrix[i][j] = Math.max((count3 - count4 - count5), 0);
                         break;
                     case 1:
-                        int count4 = transMatrix[i][0] * transMatrix[i][1] * transMatrix[i][2];
-                        countMatrix[i][j] = count4;
-                        if (count4 == 0) {
-                            break;
-                        }
-                        // 三连线 = 4连线 - 3連線
-                        countMatrix[i][j - 1] = Math.max((countMatrix[i][j - 1] - count4), 0);
+                        countMatrix[i][j] = Math.max((count4 - count5), 0);
                         break;
                     case 2:
-                        int count5 = transMatrix[i][0] * transMatrix[i][1] * transMatrix[i][2] * transMatrix[i][3];
-                        countMatrix[i][j] = count5;
-                        // 三连线--
-                        if (count5 == 0) {
-                            break;
-                        }
-                        // 4连线--
-                        countMatrix[i][j - 1] = Math.max((countMatrix[i][j - 1] - count5), 0);
+                        countMatrix[i][j] = Math.max((count5), 0);
                         break;
+//                    case 0:
+//                        countMatrix[i][j] = transMatrix[i][0] * transMatrix[i][1];
+//                        break;
+//                    case 1:
+//                        int count4 = transMatrix[i][0] * transMatrix[i][1] * transMatrix[i][2];
+//                        countMatrix[i][j] = count4;
+//                        if (count4 == 0) {
+//                            break;
+//                        }
+//                        // 三连线 = 4连线 - 3連線
+//                        countMatrix[i][j - 1] = Math.max((countMatrix[i][j - 1] - count4), 0);
+//                        break;
+//                    case 2:
+//                        int count5 = transMatrix[i][0] * transMatrix[i][1] * transMatrix[i][2] * transMatrix[i][3];
+//                        countMatrix[i][j] = count5;
+//                        // 三连线--
+//                        if (count5 == 0) {
+//                            break;
+//                        }
+//                        // 4连线--
+//                        countMatrix[i][j - 1] = Math.max((countMatrix[i][j - 1] - count5), 0);
+//                        break;
                     default:
                         break;
                 }
