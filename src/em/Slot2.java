@@ -38,7 +38,7 @@ public class Slot2 {
          * 1E    => Total time =  105 秒
          *
          * */
-        final int loop = 100000000;
+        final int loop = 1000000;
         long loopStart = System.currentTimeMillis();
         boolean isPercentage = true;
         for (int z = 0; z < loop; z++) {
@@ -162,11 +162,11 @@ public class Slot2 {
 
     private static List<int[]> gernerateWhellList() {
         Gson gson = new Gson();
-        RollerSetting rollerSetting1 = new RollerSetting(1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9);
-        RollerSetting rollerSetting2 = new RollerSetting(2, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9);
-        RollerSetting rollerSetting3 = new RollerSetting(3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4);
-        RollerSetting rollerSetting4 = new RollerSetting(4, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9);
-        RollerSetting rollerSetting5 = new RollerSetting(5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9);
+        RollerSetting rollerSetting1 = new RollerSetting(1, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999);
+        RollerSetting rollerSetting2 = new RollerSetting(2, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999);
+        RollerSetting rollerSetting3 = new RollerSetting(3, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999);
+        RollerSetting rollerSetting4 = new RollerSetting(4, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999);
+        RollerSetting rollerSetting5 = new RollerSetting(5, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999, 99999);
 
 //        RollerSetting rollerSetting1 = new RollerSetting(1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 //        RollerSetting rollerSetting2 = new RollerSetting(2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
