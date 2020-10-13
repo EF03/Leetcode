@@ -1,4 +1,4 @@
-package em;
+package em.slot;
 
 /**
  * @author Ron

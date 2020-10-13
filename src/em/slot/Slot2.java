@@ -1,9 +1,8 @@
-package em;
+package em.slot;
 
 import com.google.gson.Gson;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;
