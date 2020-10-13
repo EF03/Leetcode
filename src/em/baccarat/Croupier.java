@@ -94,7 +94,7 @@ public class Croupier extends Thread {
                 .mapToInt(Card::getSymbol)
                 .map(e -> e - 64)
                 .filter(e -> e < 10)
-                .sum();
+                .sum() % 10;
     }
 
     private static void playBaccarat() {
@@ -125,8 +125,10 @@ public class Croupier extends Thread {
 
         int sumOdd = getCardsSum(odd);
         int sumEven = getCardsSum(even);
+
         System.out.println("sumOdd = " + sumOdd);
         System.out.println("sumEven = " + sumEven);
+
         int differenceOdd = differenceNine(sumOdd);
         int differenceEven = differenceNine(sumEven);
         System.out.println("differenceOdd = " + differenceOdd);
@@ -276,7 +278,7 @@ public class Croupier extends Thread {
     }
 
     private static int differenceNine(int sum) {
-        return Math.abs(9 - sum);
+        return (9 - sum);
     }
 
 
